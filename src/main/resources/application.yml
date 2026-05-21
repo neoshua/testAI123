@@ -1,0 +1,101 @@
+server:
+  port: 8989
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  profiles:
+    active: dev
+  ai:
+    mcp:
+      client:
+        streamable-http:
+          connections:
+            gaoDe:
+              url: https://mcp.amap.com
+              endpoint: /mcp?key=97f71b1c1b169d2a2e004c4139643917
+
+    websearch:
+      api-key:  ${knowledge.websearch.api-key}
+      searxng:
+        url: "http://192.168.175.128:8080/search"
+        nums: 10
+        engines: "duckduckgo,google,bing,brave,mojeek,presearch,qwant,startpage,yahoo,arxiv,crossref,google_scholar,internetarchivescholar,semantic_scholar"
+    dashscope:
+      api-key: ${knowledge.dashscope.api-key}
+      chat:
+        options:
+          model: qwen3-max
+      embedding:
+        options:
+          model: text-embedding-v4
+          dimensions: 1536
+
+    vectorstore:
+      milvus:
+        client:
+          host: "192.168.175.128" # default: localhost
+          port: 19530 # default: 19530
+          username: "" # default: root
+          password: "" # default: milvus
+        databaseName: "default"
+        collectionName: "vector_store" # default: vector_store
+        embeddingDimension: 1536 # default: 1536
+        indexType: IVF_FLAT # default: IVF_FLAT
+        metricType: COSINE # default: COSINE
+        initializeSchema: true # 自动创建集合
+    ollama:
+      chat:
+        model: qwen3:4b
+  datasource:
+    username: test
+    password: test
+    url: jdbc:mysql://192.168.175.128:3306/test?serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+  data:
+    redis:
+      host: 192.168.175.128
+      port: 6379              # Redis 服务器端口，默认为 6379
+      password: redis              # Redis 密码，默认为空
+      timeout: 5000ms         # 连接超时时间
+      lettuce:
+        pool:
+          max-active: 8       # 最大连接数
+          max-idle: 4         # 最大空闲连接数
+          min-idle: 1         # 最小空闲连接数
+          max-wait: 2000ms
+aliyun:
+  alioss:
+    endpoint: ${knowledge.alioss.endpoint}
+    access-key-id: ${knowledge.alioss.access-key-id}
+    access-key-secret: ${knowledge.alioss.access-key-secret}
+    bucket-name: ${knowledge.alioss.bucket-name}
+
+knowledge:
+  jwt:
+    # 设置jwt签名加密时使用的秘钥
+    admin-secret-key: knowledge
+    # 设置jwt过期时间
+    admin-ttl: 7200000
+    # 设置前端传递过来的令牌名称
+    admin-token-name: token
+    user-secret-key: knowledge
+    user-ttl: 7200000
+    user-token-name: authorization
+super-sql:
+  init-train: false
+  scope: ALONE  # ALL 整库训练, ALONE 单库训练
+  schemas:
+    - schema: test  # 指定数据库
+
+
+logging:
+  level:
+    org:
+      springframework:
+        ai:
+          chat: debug

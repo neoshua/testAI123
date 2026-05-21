@@ -1,0 +1,9 @@
+knowledge:
+  alioss:
+    endpoint: oss-cn-beijing.aliyuncs.com
+    access-key-id: YOUR_ALIOSS_ACCESS_KEY_ID
+    access-key-secret: YOUR_ALIOSS_ACCESS_KEY_SECRET
+    bucket-name: gaofengagi
+  websearch:
+    api-key: YOUR_WEBSEARCH_API_KEY
+
